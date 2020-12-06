@@ -1,1 +1,1 @@
-# mineswapper
+#[ModKit Wiki](../../wiki)
