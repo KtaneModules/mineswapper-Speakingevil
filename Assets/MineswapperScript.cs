@@ -128,6 +128,7 @@ public class MineswapperScript : MonoBehaviour {
         swap = ordering[a];
         ordering[a] = ordering[b];
         ordering[b] = swap;
+        if (Check())
         {
             moduleSolved = true;
             module.HandlePass();
