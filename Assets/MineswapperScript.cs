@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using System.Text.RegularExpressions;
 using Random = UnityEngine.Random;
 
 public class MineswapperScript : MonoBehaviour {
@@ -157,4 +158,42 @@ public class MineswapperScript : MonoBehaviour {
         }
         return !correct.Any(x => x.Contains(false));
     }
+	
+	//twitch plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"Use !{0} swap [A1-F6] [A1-F6] to swap the tiles on the given coordinates";
+    #pragma warning restore 414
+	
+	string[] CoordinatesL = {"A", "B", "C", "D", "E", "F"};
+	string[] CoordinatesN = {"1", "2", "3", "4", "5", "6"};
+	
+	IEnumerator ProcessTwitchCommand(string command)
+    {
+		string[] parameters = command.Split(' ');
+		if (Regex.IsMatch(parameters[0], @"^\s*swap\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+			yield return null;
+			if (parameters.Length != 3)
+			{
+				yield return "sendtochaterror Invalid parameter length. Command ignored.";
+				yield break;
+			}
+			
+			if (parameters[1].Length != 2 || !parameters[1][0].ToString().ToUpper().EqualsAny(CoordinatesL) || !parameters[1][1].ToString().EqualsAny(CoordinatesN) || parameters[2].Length != 2 || !parameters[2][0].ToString().ToUpper().EqualsAny(CoordinatesL) || !parameters[2][1].ToString().EqualsAny(CoordinatesN))
+			{
+				yield return "sendtochaterror One or more coordinates being sent is not valid. Command ignored.";
+				yield break;
+			}
+			
+			if (parameters[1].ToUpper() == parameters[2].ToUpper())
+			{
+				yield return "sendtochaterror You can not swap 2 similar coordinates. Command ignored.";
+				yield break;
+			}
+		}
+		
+		buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[1][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[1][0].ToString().ToUpper()))].OnInteract();
+		yield return new WaitForSecondsRealtime(0.1f);
+		buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[2][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[2][0].ToString().ToUpper()))].OnInteract();
+	}
 }
