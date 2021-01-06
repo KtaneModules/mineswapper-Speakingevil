@@ -190,6 +190,12 @@ public class MineswapperScript : MonoBehaviour {
 				yield return "sendtochaterror You can not swap 2 similar coordinates. Command ignored.";
 				yield break;
 			}
+			
+			if (swapping)
+			{
+				yield return "sendtochaterror The module is performing a swap. Command ignored.";
+				yield break;
+			}
 		}
 		
 		buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[1][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[1][0].ToString().ToUpper()))].OnInteract();
