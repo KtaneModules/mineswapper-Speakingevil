@@ -196,10 +196,11 @@ public class MineswapperScript : MonoBehaviour {
 				yield return "sendtochaterror The module is performing a swap. Command ignored.";
 				yield break;
 			}
+			
+			buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[1][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[1][0].ToString().ToUpper()))].OnInteract();
+			yield return new WaitForSecondsRealtime(0.1f);
+			buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[2][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[2][0].ToString().ToUpper()))].OnInteract();
+			
 		}
-		
-		buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[1][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[1][0].ToString().ToUpper()))].OnInteract();
-		yield return new WaitForSecondsRealtime(0.1f);
-		buttons[Array.IndexOf(ordering, (Array.IndexOf(CoordinatesN, parameters[2][1].ToString()) * 6) % 36 + Array.IndexOf(CoordinatesL, parameters[2][0].ToString().ToUpper()))].OnInteract();
 	}
 }
